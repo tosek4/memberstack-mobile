@@ -7,61 +7,61 @@
  */
 
 export type MemberStatus =
-  | 'active'
-  | 'inactive'
-  | 'expired'
-  | 'suspended'
-  | 'blocked'
+  | "active"
+  | "inactive"
+  | "expired"
+  | "suspended"
+  | "blocked";
 
 export interface Member {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  phone?: string
-  birthDate?: string // ISO date, e.g. "1994-03-12"
-  gender?: 'male' | 'female'
-  emergencyContact?: string
-  status: MemberStatus
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  birthDate?: string; // ISO date, e.g. "1994-03-12"
+  gender?: "male" | "female";
+  emergencyContact?: string;
+  status: MemberStatus;
 }
 
 export interface MembershipPlan {
-  id: number
-  name: string
-  description?: string
-  price: number
-  duration: number // days
+  id: number;
+  name: string;
+  description?: string;
+  price: number;
+  duration: number; // days
 }
 
-export type SubscriptionStatus = 'active' | 'expired' | 'inactive'
+export type SubscriptionStatus = "active" | "expired" | "inactive";
 
 export interface MemberSubscription {
-  id: number
-  status: SubscriptionStatus
-  startedAt: string // ISO date-time
-  expiresAt: string // ISO date-time
-  plan: MembershipPlan
+  id: number;
+  status: SubscriptionStatus;
+  startedAt: string; // ISO date-time
+  expiresAt: string; // ISO date-time
+  plan: MembershipPlan;
 }
 
 /** GET /me */
 export interface MeResponse {
-  member: Member
-  subscription: MemberSubscription | null // null = no subscription yet
+  member: Member;
+  subscription: MemberSubscription | null; // null = no subscription yet
 }
 
 /** POST /member-auth/request-code  (always answers 204, even for unknown emails) */
 export interface RequestCodeBody {
-  email: string
+  email: string;
 }
 
 /** POST /member-auth/verify-code */
 export interface VerifyCodeBody {
-  email: string
-  code: string // 6 digits
+  email: string;
+  code: string; // 6 digits
 }
 
 /** Response of verify-code and refresh */
 export interface AuthTokens {
-  accessToken: string
-  refreshToken: string
+  accessToken: string;
+  refreshToken: string;
 }
