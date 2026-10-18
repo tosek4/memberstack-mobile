@@ -1,11 +1,17 @@
 import { Screen } from "@/components/ui/Screen";
 import { screenStyles as ui } from "@/components/ui/Screen.styles";
-import { daysLeft, mockMe } from "@/mock/data";
+import { ScreenState } from "@/components/ui/ScreenState";
+import { useMe } from "@/hooks/useMe";
+import { daysLeft } from "@/mock/data";
 import { Text, View } from "react-native";
 import { styles } from "./MyPlanScreen.styles";
 
 export function MyPlanScreen() {
-  const sub = mockMe.subscription;
+  const { data, loading, error, reload } = useMe();
+  if (!data)
+    return <ScreenState loading={loading} error={error} onRetry={reload} />;
+
+  const sub = data.subscription;
   const format = (date: string) =>
     new Date(date).toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -20,6 +26,7 @@ export function MyPlanScreen() {
         ["Payment status", "Managed at reception"],
       ]
     : [];
+
   return (
     <Screen>
       <Text style={ui.eyebrow}>YOUR MEMBERSHIP</Text>
@@ -30,7 +37,7 @@ export function MyPlanScreen() {
             <View style={styles.heroTop}>
               <Text style={styles.eyebrow}>CURRENT PLAN</Text>
               <View style={styles.pill}>
-                <Text style={styles.pillText}>ACTIVE</Text>
+                <Text style={styles.pillText}>{sub.status.toUpperCase()}</Text>
               </View>
             </View>
             <Text style={styles.name}>{sub.plan.name}</Text>
@@ -68,7 +75,6 @@ export function MyPlanScreen() {
           </Text>
         </View>
       )}
-      <Text style={styles.foot}>Membership details shown with demo data.</Text>
     </Screen>
   );
 }

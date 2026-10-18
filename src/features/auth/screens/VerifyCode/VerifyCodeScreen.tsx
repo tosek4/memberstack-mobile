@@ -1,3 +1,6 @@
+import { useAuth } from "@/hooks/useAuth";
+import { ApiError, getErrorMessage } from "@/services/api";
+import { requestCode, verifyCode } from "@/services/authApi";
 import { palette } from "@/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -7,15 +10,43 @@ import { styles } from "./VerifyCodeScreen.styles";
 export function VerifyCodeScreen() {
   const params = useLocalSearchParams<{ email?: string }>();
   const email = typeof params.email === "string" ? params.email : "";
+  const { signIn } = useAuth();
   const [code, setCode] = useState("");
-  const verify = () => {
+  const [loading, setLoading] = useState(false);
+
+  const verify = async () => {
     if (!/^\d{6}$/.test(code)) {
       Alert.alert("Enter your code", "Type the 6-digit code to continue.");
       return;
     }
-    // Demo only: any six-digit code works until the API is connected.
-    router.replace("/(tabs)");
+    setLoading(true);
+    try {
+      const tokens = await verifyCode(email, code);
+      await signIn(tokens);
+      router.replace("/"); // index.tsx sends signed-in users to the tabs
+    } catch (error) {
+      const wrongCode =
+        error instanceof ApiError && error.status >= 400 && error.status < 500;
+      Alert.alert(
+        "Couldn't sign in",
+        wrongCode
+          ? "That code is invalid or has expired. Request a new one."
+          : getErrorMessage(error),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const resend = async () => {
+    try {
+      await requestCode(email);
+      Alert.alert("Code sent", "Check your inbox for a new code.");
+    } catch (error) {
+      Alert.alert("Couldn't send the code", getErrorMessage(error));
+    }
+  };
+
   return (
     <View style={styles.safe}>
       <View style={styles.page}>
@@ -39,22 +70,19 @@ export function VerifyCodeScreen() {
           placeholder="— — — — — —"
           placeholderTextColor="#94A3B8"
           style={styles.code}
+          editable={!loading}
         />
-        <Text style={styles.note}>
-          Demo mode: enter any 6 digits to continue.
-        </Text>
-        <Pressable style={styles.button} onPress={verify}>
-          <Text style={styles.buttonText}>Verify code</Text>
+        <Pressable
+          style={[styles.button, loading && { opacity: 0.6 }]}
+          onPress={verify}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Verifying…" : "Verify code"}
+          </Text>
           <Text style={styles.arrow}>→</Text>
         </Pressable>
-        <Pressable
-          onPress={() =>
-            Alert.alert(
-              "Code not sent",
-              "Email delivery will be connected when the API is ready.",
-            )
-          }
-        >
+        <Pressable onPress={resend}>
           <Text style={styles.resend}>
             Didn't get a code?{" "}
             <Text style={{ color: palette.primary, fontWeight: "700" }}>

@@ -1,12 +1,19 @@
 import { Screen } from "@/components/ui/Screen";
 import { screenStyles as ui } from "@/components/ui/Screen.styles";
-import { mockMe } from "@/mock/data";
+import { ScreenState } from "@/components/ui/ScreenState";
+import { useAuth } from "@/hooks/useAuth";
+import { useMe } from "@/hooks/useMe";
 import { router } from "expo-router";
 import { Alert, Pressable, Text, View } from "react-native";
 import { styles } from "./ProfileScreen.styles";
 
 export function ProfileScreen() {
-  const member = mockMe.member;
+  const { data, loading, error, reload } = useMe();
+  const { signOut } = useAuth();
+  if (!data)
+    return <ScreenState loading={loading} error={error} onRetry={reload} />;
+
+  const member = data.member;
   const rows: [string, string][] = [
     ["Email address", member.email],
     ["Phone number", member.phone ?? "Not provided"],
@@ -25,6 +32,7 @@ export function ProfileScreen() {
       member.status.charAt(0).toUpperCase() + member.status.slice(1),
     ],
   ];
+
   return (
     <Screen>
       <Text style={ui.eyebrow}>ACCOUNT</Text>
@@ -78,7 +86,10 @@ export function ProfileScreen() {
             {
               text: "Sign out",
               style: "destructive",
-              onPress: () => router.replace("/(auth)/login"),
+              onPress: async () => {
+                await signOut();
+                router.replace("/");
+              },
             },
           ])
         }
@@ -88,7 +99,7 @@ export function ProfileScreen() {
           <Text style={styles.arrow}>›</Text>
         </View>
       </Pressable>
-      <Text style={styles.foot}>MemberStack Mobile · Demo preview</Text>
+      <Text style={styles.foot}>MemberStack Mobile</Text>
     </Screen>
   );
 }

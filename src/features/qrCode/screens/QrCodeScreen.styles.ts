@@ -1,3 +1,100 @@
-import { StyleSheet } from 'react-native';
-import { lightColors as c, palette } from '@/theme';
-export const styles = StyleSheet.create({ card: { backgroundColor: 'white', borderRadius: 24, padding: 22, alignItems: 'center', borderWidth: 1, borderColor: '#E6EDF2', shadowColor: '#15344A', shadowOpacity: 0.06, shadowRadius: 15, shadowOffset: { width: 0, height: 5 }, elevation: 2 }, status: { flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: '#E4F9EC', paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20 }, dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: '#16A34A' }, statusText: { fontSize: 9, letterSpacing: 1, fontWeight: '900', color: '#16834A' }, qr: { width: 204, height: 204, marginTop: 24, marginBottom: 20, padding: 7, backgroundColor: 'white' }, qrRow: { flex: 1, flexDirection: 'row' }, cell: { flex: 1, margin: 0.35 }, memberName: { fontSize: 20, fontWeight: '800', color: c.text }, memberId: { fontSize: 10, fontWeight: '700', letterSpacing: 1.2, color: c.textMuted, marginTop: 6 }, divider: { height: 1, backgroundColor: c.border, width: '100%', marginVertical: 20 }, bottom: { width: '100%', flexDirection: 'row', justifyContent: 'space-between' }, label: { fontSize: 9, fontWeight: '800', letterSpacing: 1, color: c.textMuted }, value: { fontSize: 13, fontWeight: '800', color: c.text, marginTop: 6 }, info: { marginTop: 18, padding: 15, borderRadius: 15, backgroundColor: '#E1F7FB', flexDirection: 'row', gap: 10 }, infoIcon: { fontSize: 19, color: palette.primary }, infoTitle: { fontSize: 12, fontWeight: '800', color: c.text }, infoText: { fontSize: 11, lineHeight: 17, color: c.textMuted, marginTop: 4 } });
+import { lightColors as c, lightColors, palette } from "@/theme";
+import { StyleSheet } from "react-native";
+export const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "white",
+    borderRadius: 24,
+    padding: 22,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#E6EDF2",
+    shadowColor: "#15344A",
+    shadowOpacity: 0.06,
+    shadowRadius: 15,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 2,
+  },
+  status: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
+    backgroundColor: "#E4F9EC",
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 20,
+  },
+  dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: "#16A34A" },
+  statusText: {
+    fontSize: 9,
+    letterSpacing: 1,
+    fontWeight: "900",
+    color: "#16834A",
+  },
+  qr: {
+    width: 204,
+    height: 204,
+    marginTop: 24,
+    marginBottom: 20,
+    padding: 7,
+    backgroundColor: "white",
+  },
+  qrRow: { flex: 1, flexDirection: "row" },
+  cell: { flex: 1, margin: 0.35 },
+  memberName: { fontSize: 20, fontWeight: "800", color: c.text },
+  memberId: {
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+    color: c.textMuted,
+    marginTop: 6,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: c.border,
+    width: "100%",
+    marginVertical: 20,
+  },
+  bottom: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  label: {
+    fontSize: 9,
+    fontWeight: "800",
+    letterSpacing: 1,
+    color: c.textMuted,
+  },
+  value: { fontSize: 13, fontWeight: "800", color: c.text, marginTop: 6 },
+  info: {
+    marginTop: 18,
+    padding: 15,
+    borderRadius: 15,
+    backgroundColor: "#E1F7FB",
+    flexDirection: "row",
+    gap: 10,
+  },
+  infoIcon: { fontSize: 19, color: palette.primary },
+  infoTitle: { fontSize: 12, fontWeight: "800", color: c.text },
+  infoText: { fontSize: 11, lineHeight: 17, color: c.textMuted, marginTop: 4 },
+});
+
+export const local = StyleSheet.create({
+  qrBox: {
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 224,
+    minHeight: 224,
+    padding: 12,
+    marginVertical: 18,
+    backgroundColor: "white",
+    borderRadius: 12,
+  },
+  error: {
+    textAlign: "center",
+    color: lightColors.textMuted,
+    marginBottom: 10,
+  },
+  retry: { color: lightColors.primary, fontWeight: "800" },
+});

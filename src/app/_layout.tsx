@@ -1,15 +1,37 @@
-import { Stack } from "expo-router";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+
+// Keep the splash screen up until we know if the user is signed in.
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   return (
-    <>
+    <AuthProvider>
       <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
+      <RootNavigator />
+    </AuthProvider>
+  );
+}
+
+function RootNavigator() {
+  const { status } = useAuth();
+
+  useEffect(() => {
+    if (status !== "loading") SplashScreen.hide();
+  }, [status]);
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Protected guard={status === "signedIn"}>
         <Stack.Screen name="(tabs)" />
-      </Stack>
-    </>
+      </Stack.Protected>
+      <Stack.Protected guard={status === "signedOut"}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+    </Stack>
   );
 }

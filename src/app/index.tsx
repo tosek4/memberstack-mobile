@@ -1,5 +1,11 @@
+import { useAuth } from "@/hooks/useAuth";
 import { Redirect } from "expo-router";
 
 export default function IndexRoute() {
-  return <Redirect href="/(auth)/login" />;
+  const { status } = useAuth();
+  if (status === "loading") return null;
+
+  return (
+    <Redirect href={status === "signedIn" ? "/(tabs)" : "/(auth)/login"} />
+  );
 }

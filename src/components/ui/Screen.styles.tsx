@@ -52,3 +52,15 @@ export const styles = StyleSheet.create({
     paddingBottom: 24,
   },
 });
+
+export const stylesScreenState = StyleSheet.create({
+  center: { flex: 1, alignItems: "center", justifyContent: "center" },
+  message: { textAlign: "center", marginBottom: 20 },
+  button: {
+    backgroundColor: lightColors.primary,
+    borderRadius: 14,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+  },
+  buttonText: { color: lightColors.onPrimary, fontWeight: "800" },
+});

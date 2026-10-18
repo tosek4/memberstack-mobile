@@ -1,12 +1,19 @@
 import { Screen } from "@/components/ui/Screen";
-import { daysLeft, mockMe } from "@/mock/data";
+import { screenStyles as ui } from "@/components/ui/Screen.styles";
+import { ScreenState } from "@/components/ui/ScreenState";
+import { useMe } from "@/hooks/useMe";
+import { daysLeft } from "@/mock/data";
 import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { styles } from "./HomeScreen.styles";
-import { screenStyles as ui } from "@/components/ui/Screen.styles";
 
 export function HomeScreen() {
-  const { member, subscription } = mockMe;
+  const { data, loading, error, reload } = useMe();
+  if (!data)
+    return <ScreenState loading={loading} error={error} onRetry={reload} />;
+
+  const { member, subscription } = data;
+  const status = subscription?.status ?? "inactive";
   const remaining = subscription
     ? Math.max(daysLeft(subscription.expiresAt), 0)
     : 0;
@@ -17,6 +24,7 @@ export function HomeScreen() {
         year: "numeric",
       })
     : "—";
+
   return (
     <Screen>
       <View style={styles.top}>
@@ -36,14 +44,15 @@ export function HomeScreen() {
           <Text style={styles.heroEyebrow}>YOUR MEMBERSHIP</Text>
           <View style={styles.activePill}>
             <View style={styles.dot} />
-            <Text style={styles.activeText}>ACTIVE</Text>
+            <Text style={styles.activeText}>{status.toUpperCase()}</Text>
           </View>
         </View>
         <Text style={styles.planName}>
           {subscription?.plan.name ?? "No active plan"}
         </Text>
         <Text style={styles.heroSub}>
-          {subscription?.plan.description ?? "Choose a plan to get started"}
+          {subscription?.plan.description ??
+            "Visit the front desk to get started"}
         </Text>
         <View style={styles.heroBottom}>
           <View>
@@ -77,9 +86,15 @@ export function HomeScreen() {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.rowTitle}>Membership status</Text>
-            <Text style={styles.rowSub}>Your plan is ready to use</Text>
+            <Text style={styles.rowSub}>
+              {status === "active"
+                ? "Your plan is ready to use"
+                : "Visit the front desk to renew"}
+            </Text>
           </View>
-          <Text style={styles.good}>Active</Text>
+          <Text style={styles.good}>
+            {status.charAt(0).toUpperCase() + status.slice(1)}
+          </Text>
         </View>
         <View style={ui.divider} />
         <View style={styles.row}>
@@ -97,10 +112,6 @@ export function HomeScreen() {
           </Text>
         </View>
       </View>
-      <Text style={styles.disclaimer}>
-        Mock data preview · Your real membership will appear here after API
-        integration.
-      </Text>
     </Screen>
   );
 }

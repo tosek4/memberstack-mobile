@@ -1,3 +1,5 @@
+import { getErrorMessage } from "@/services/api";
+import { requestCode } from "@/services/authApi";
 import { palette } from "@/theme";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -13,8 +15,10 @@ import {
 import { styles } from "./LoginScreen.styles";
 
 export function LoginScreen() {
-  const [email, setEmail] = useState("aleksandar.petrovski@example.com");
-  const continueWithEmail = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const continueWithEmail = async () => {
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
       Alert.alert(
@@ -23,11 +27,20 @@ export function LoginScreen() {
       );
       return;
     }
-    router.push({
-      pathname: "/(auth)/verify-code",
-      params: { email: normalizedEmail },
-    });
+    setLoading(true);
+    try {
+      await requestCode(normalizedEmail);
+      router.push({
+        pathname: "/(auth)/verify-code",
+        params: { email: normalizedEmail },
+      });
+    } catch (error) {
+      Alert.alert("Couldn't send the code", getErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <KeyboardAvoidingView
       style={styles.safe}
@@ -56,9 +69,16 @@ export function LoginScreen() {
           style={styles.input}
           returnKeyType="go"
           onSubmitEditing={continueWithEmail}
+          editable={!loading}
         />
-        <Pressable style={styles.button} onPress={continueWithEmail}>
-          <Text style={styles.buttonText}>Continue with email</Text>
+        <Pressable
+          style={[styles.button, loading && { opacity: 0.6 }]}
+          onPress={continueWithEmail}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Sending code…" : "Continue with email"}
+          </Text>
           <Text style={styles.arrow}>→</Text>
         </Pressable>
         <Text style={styles.hint}>
