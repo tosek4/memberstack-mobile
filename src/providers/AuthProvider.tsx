@@ -1,15 +1,8 @@
 import { setSessionExpiredHandler } from "@/services/api";
 import { clearTokens, getTokens, saveTokens } from "@/services/tokenStorage";
-import { AuthTokens } from "@/types/api";
+import { AuthTokens } from "@/types";
 import { createContext, ReactNode, useEffect, useState } from "react";
-
-export type AuthStatus = "loading" | "signedIn" | "signedOut";
-
-interface AuthContextValue {
-  status: AuthStatus;
-  signIn: (tokens: AuthTokens) => Promise<void>;
-  signOut: () => Promise<void>;
-}
+import { AuthContextValue, AuthStatus } from "./types";
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 

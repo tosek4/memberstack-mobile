@@ -1,4 +1,4 @@
-import { AuthTokens, RequestCodeBody, VerifyCodeBody } from "@/types/api";
+import { AuthTokens, RequestCodeBody, VerifyCodeBody } from "@/types";
 import { apiRequest } from "./api";
 
 export function requestCode(email: string): Promise<void> {

@@ -2,7 +2,7 @@ import { Screen } from "@/components/ui/Screen";
 import { screenStyles as ui } from "@/components/ui/Screen.styles";
 import { ScreenState } from "@/components/ui/ScreenState";
 import { useMe } from "@/hooks/useMe";
-import { daysLeft } from "@/mock/data";
+import { daysLeft } from "@/utils";
 import { Text, View } from "react-native";
 import { styles } from "./MyPlanScreen.styles";
 

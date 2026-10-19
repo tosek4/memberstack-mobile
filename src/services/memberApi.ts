@@ -1,4 +1,4 @@
-import { MeResponse } from "@/types/api";
+import { MeResponse } from "@/types";
 import { apiRequest } from "./api";
 
 export function getMe(): Promise<MeResponse> {

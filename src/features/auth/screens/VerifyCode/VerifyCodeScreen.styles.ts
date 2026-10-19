@@ -1,5 +1,6 @@
 import { lightColors as c, palette } from "@/theme";
 import { StyleSheet } from "react-native";
+
 export const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.background },
   page: { flex: 1, paddingHorizontal: 26, paddingTop: 24 },

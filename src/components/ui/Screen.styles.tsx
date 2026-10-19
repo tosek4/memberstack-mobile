@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
   },
 });
 
-export const stylesScreenState = StyleSheet.create({
+export const ScreenStateStyles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   message: { textAlign: "center", marginBottom: 20 },
   button: {
@@ -63,4 +63,6 @@ export const stylesScreenState = StyleSheet.create({
     paddingVertical: 14,
   },
   buttonText: { color: lightColors.onPrimary, fontWeight: "800" },
+  link: { marginTop: 18, padding: 8 },
+  linkText: { color: lightColors.danger, fontWeight: "700" },
 });

@@ -1,14 +1,10 @@
-/**
- * Design tokens. Screens and components take colors, spacing and font sizes
- * from here so the look can be changed in one place (and dark mode is easy).
- */
-
 export const palette = {
   primary: "#0891B2", // teal, same as the MemberStack web app
   primaryDark: "#0E7490",
   success: "#16A34A",
   warning: "#D97706",
   danger: "#DC2626",
+  good: "#159653",
 } as const;
 
 export const lightColors = {
@@ -22,6 +18,7 @@ export const lightColors = {
   success: palette.success,
   warning: palette.warning,
   danger: palette.danger,
+  daysNumber: "#6EE7B7",
 } as const;
 
 export const darkColors = {

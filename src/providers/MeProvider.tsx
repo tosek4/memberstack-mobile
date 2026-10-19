@@ -1,6 +1,6 @@
 import { getErrorMessage } from "@/services/api";
 import { getMe } from "@/services/memberApi";
-import { MeResponse } from "@/types/api";
+import { MeResponse } from "@/types";
 import {
   createContext,
   ReactNode,

@@ -18,10 +18,10 @@ export function useQrToken() {
       const offline = e instanceof ApiError && e.status === 0;
       const cached = offline ? await getQrToken() : null;
       if (cached) {
-        setToken(cached); // no signal at the gym: show the last known QR
+        setToken(cached); 
         setError(null);
       } else {
-        if (!offline) await clearQrToken(); // server said no QR: drop the old one
+        if (!offline) await clearQrToken(); 
         setToken(null);
         setError(getErrorMessage(e));
       }

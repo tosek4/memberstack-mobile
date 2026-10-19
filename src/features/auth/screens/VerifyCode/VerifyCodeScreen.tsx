@@ -23,7 +23,7 @@ export function VerifyCodeScreen() {
     try {
       const tokens = await verifyCode(email, code);
       await signIn(tokens);
-      router.replace("/"); // index.tsx sends signed-in users to the tabs
+      router.replace("/");
     } catch (error) {
       const wrongCode =
         error instanceof ApiError && error.status >= 400 && error.status < 500;

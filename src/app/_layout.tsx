@@ -4,7 +4,6 @@ import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
-// Keep the splash screen up until we know if the user is signed in.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

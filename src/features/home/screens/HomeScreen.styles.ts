@@ -1,5 +1,6 @@
-import { lightColors as c, palette } from "@/theme";
+import { lightColors as c, lightColors, palette } from "@/theme";
 import { StyleSheet } from "react-native";
+
 export const styles = StyleSheet.create({
   top: {
     flexDirection: "row",
@@ -70,7 +71,11 @@ export const styles = StyleSheet.create({
   },
   heroValue: { fontSize: 16, fontWeight: "700", color: "white", marginTop: 5 },
   days: { alignItems: "flex-end" },
-  daysNumber: { fontSize: 26, fontWeight: "800", color: "#6EE7B7" },
+  daysNumber: {
+    fontSize: 26,
+    fontWeight: "800",
+    color: lightColors.daysNumber,
+  },
   daysLabel: {
     fontSize: 8,
     fontWeight: "800",
@@ -109,7 +114,7 @@ export const styles = StyleSheet.create({
   },
   rowTitle: { fontSize: 13, fontWeight: "800", color: c.text },
   rowSub: { fontSize: 11, color: c.textMuted, marginTop: 4 },
-  good: { fontSize: 11, fontWeight: "800", color: "#159653" },
+  good: { fontSize: 11, fontWeight: "800", color: palette.good },
   price: { fontSize: 14, fontWeight: "800", color: c.text },
   disclaimer: {
     fontSize: 10,

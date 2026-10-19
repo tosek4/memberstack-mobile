@@ -1,9 +1,9 @@
 import { API_BASE_URL } from "@/constants/config";
-import { AuthTokens } from "@/types/api";
+import { AuthTokens } from "@/types";
 import { clearTokens, getTokens, saveTokens } from "./tokenStorage";
 
 export class ApiError extends Error {
-  status: number; // 0 = could not reach the server
+  status: number;
 
   constructor(status: number, message: string) {
     super(message);
@@ -18,7 +18,6 @@ export function getErrorMessage(error: unknown): string {
 
 type RequestOptions = RequestInit & { auth?: boolean };
 
-// AuthProvider registers this so the UI can react when the session dies.
 let onSessionExpired: (() => void) | null = null;
 export function setSessionExpiredHandler(handler: (() => void) | null) {
   onSessionExpired = handler;
@@ -53,8 +52,6 @@ async function readErrorMessage(response: Response): Promise<string> {
   }
 }
 
-// If several requests get a 401 at the same time, they share ONE refresh call.
-// Refresh tokens are often single-use, so parallel refreshes would break each other.
 let refreshing: Promise<string | null> | null = null;
 
 function refreshAccessToken(): Promise<string | null> {
@@ -74,11 +71,10 @@ async function doRefresh(): Promise<string | null> {
   });
 
   if (response.status === 401 || response.status === 403) {
-    await clearTokens(); // refresh token is dead: the session is really over
+    await clearTokens(); 
     return null;
   }
   if (!response.ok) {
-    // Server problem, not an auth problem: keep the tokens and fail this request only.
     throw new ApiError(response.status, await readErrorMessage(response));
   }
 
@@ -93,8 +89,6 @@ export async function apiRequest<T>(
 ): Promise<T> {
   const tokens = auth ? await getTokens() : null;
 
-  console.log("tokens===", tokens);
-  console.log("path====", path);
   let response = await send(path, init, tokens?.accessToken);
 
   if (auth && response.status === 401) {
@@ -107,8 +101,6 @@ export async function apiRequest<T>(
       );
     }
     response = await send(path, init, freshToken);
-
-    console.log("[api] 401 on", path, await response.clone().text());
   }
 
   if (!response.ok) {
