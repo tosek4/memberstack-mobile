@@ -3,8 +3,9 @@ import { ApiError, getErrorMessage } from "@/services/api";
 import { requestCode, verifyCode } from "@/services/authApi";
 import { palette } from "@/theme";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Pressable, Text, TextInput, View } from "react-native";
+import { RESEND_COOLDOWN_S } from "../../utils";
 import { styles } from "./VerifyCodeScreen.styles";
 
 export function VerifyCodeScreen() {
@@ -13,6 +14,13 @@ export function VerifyCodeScreen() {
   const { signIn } = useAuth();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_S);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   const verify = async () => {
     if (!/^\d{6}$/.test(code)) {
@@ -39,9 +47,14 @@ export function VerifyCodeScreen() {
   };
 
   const resend = async () => {
+    if (cooldown > 0) return;
     try {
       await requestCode(email);
-      Alert.alert("Code sent", "Check your inbox for a new code.");
+      setCooldown(RESEND_COOLDOWN_S);
+      Alert.alert(
+        "Request sent",
+        "If this email is registered, a new code is on its way.",
+      );
     } catch (error) {
       Alert.alert("Couldn't send the code", getErrorMessage(error));
     }
@@ -59,6 +72,9 @@ export function VerifyCodeScreen() {
         <Text style={styles.title}>Check your inbox.</Text>
         <Text style={styles.subtitle}>We sent a 6-digit sign-in code to</Text>
         <Text style={styles.email}>{email}</Text>
+        <Pressable onPress={() => router.back()}>
+          <Text style={styles.wrongEmail}>Wrong email? Change it</Text>
+        </Pressable>
         <TextInput
           value={code}
           onChangeText={(value) =>
@@ -82,11 +98,16 @@ export function VerifyCodeScreen() {
           </Text>
           <Text style={styles.arrow}>→</Text>
         </Pressable>
-        <Pressable onPress={resend}>
+        <Pressable onPress={resend} disabled={cooldown > 0}>
           <Text style={styles.resend}>
-            Didn't get a code?{" "}
-            <Text style={{ color: palette.primary, fontWeight: "700" }}>
-              Resend
+            Didn't get a code? Check your spam folder or{" "}
+            <Text
+              style={{
+                color: cooldown > 0 ? "#94A3B8" : palette.primary,
+                fontWeight: "700",
+              }}
+            >
+              {cooldown > 0 ? `resend in ${cooldown}s` : "resend"}
             </Text>
           </Text>
         </Pressable>

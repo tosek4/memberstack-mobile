@@ -31,7 +31,7 @@ export function MyPlanScreen() {
     : [];
 
   return (
-    <Screen>
+    <Screen onRefresh={reload} refreshing={loading}>
       <Text style={ui.eyebrow}>YOUR MEMBERSHIP</Text>
       <Text style={ui.title}>My plan</Text>
       {sub ? (

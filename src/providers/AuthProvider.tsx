@@ -1,4 +1,5 @@
 import { setSessionExpiredHandler } from "@/services/api";
+import { logout } from "@/services/authApi";
 import { clearTokens, getTokens, saveTokens } from "@/services/tokenStorage";
 import { AuthTokens } from "@/types";
 import { createContext, ReactNode, useEffect, useState } from "react";
@@ -24,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    await logout();
     await clearTokens();
     setStatus("signedOut");
   };

@@ -1,5 +1,6 @@
 import { AuthTokens, RequestCodeBody, VerifyCodeBody } from "@/types";
 import { apiRequest } from "./api";
+import { getTokens } from "./tokenStorage";
 
 export function requestCode(email: string): Promise<void> {
   const body: RequestCodeBody = { email };
@@ -17,4 +18,20 @@ export function verifyCode(email: string, code: string): Promise<AuthTokens> {
     auth: false,
     body: JSON.stringify(body),
   });
+}
+
+export async function logout(): Promise<void> {
+  const tokens = await getTokens();
+
+  console.log("tokens===", tokens);
+  if (!tokens) return;
+  try {
+    await apiRequest<void>("/member-auth/logout", {
+      method: "POST",
+      auth: false,
+      body: JSON.stringify({ refreshToken: tokens.refreshToken }),
+    });
+  } catch {
+    // Offline or server error: the local sign out below still happens.
+  }
 }

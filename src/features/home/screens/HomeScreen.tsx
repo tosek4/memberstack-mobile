@@ -26,7 +26,7 @@ export function HomeScreen() {
     : "—";
 
   return (
-    <Screen>
+    <Screen onRefresh={reload} refreshing={loading}>
       <View style={styles.top}>
         <View>
           <Text style={ui.eyebrow}>MEMBERSTACK</Text>

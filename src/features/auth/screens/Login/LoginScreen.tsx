@@ -82,7 +82,8 @@ export function LoginScreen() {
           <Text style={styles.arrow}>→</Text>
         </Pressable>
         <Text style={styles.hint}>
-          We'll email you a one-time code. No password needed.
+          Use the email you registered with at the gym. We'll send you a
+          one-time code, no password needed.
         </Text>
         <Pressable onPress={() => router.push("/plans")}>
           <Text

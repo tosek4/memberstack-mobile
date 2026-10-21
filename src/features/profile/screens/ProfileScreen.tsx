@@ -34,7 +34,7 @@ export function ProfileScreen() {
   ];
 
   return (
-    <Screen>
+    <Screen onRefresh={reload} refreshing={loading}>
       <Text style={ui.eyebrow}>ACCOUNT</Text>
       <Text style={ui.title}>My profile</Text>
       <View style={styles.person}>
