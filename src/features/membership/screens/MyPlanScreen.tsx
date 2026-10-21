@@ -2,8 +2,11 @@ import { Screen } from "@/components/ui/Screen";
 import { screenStyles as ui } from "@/components/ui/Screen.styles";
 import { ScreenState } from "@/components/ui/ScreenState";
 import { useMe } from "@/hooks/useMe";
+import { lightColors } from "@/theme";
 import { daysLeft } from "@/utils";
-import { Text, View } from "react-native";
+import { router } from "expo-router";
+import { Pressable, Text, View } from "react-native";
+import { SubscriptionHistory } from "../components/SubscriptionHistory";
 import { styles } from "./MyPlanScreen.styles";
 
 export function MyPlanScreen() {
@@ -61,20 +64,44 @@ export function MyPlanScreen() {
           </View>
           <View style={styles.note}>
             <Text style={styles.noteTitle}>Need to renew?</Text>
-            <Text style={styles.noteText}>
-              Visit the front desk and our team will help you renew your
-              membership.
-            </Text>
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/plans",
+                  params: { currentPlanId: String(sub.plan.id) },
+                })
+              }
+            >
+              <Text
+                style={{
+                  color: lightColors.primary,
+                  fontWeight: "800",
+                  marginTop: 12,
+                }}
+              >
+                Browse all plans ›
+              </Text>
+            </Pressable>
           </View>
         </>
       ) : (
         <View style={ui.card}>
           <Text style={ui.sectionTitle}>No active membership</Text>
-          <Text style={ui.subtitle}>
-            Visit the front desk to choose a plan.
-          </Text>
+          <Pressable onPress={() => router.push("/plans")}>
+            <Text
+              style={{
+                color: lightColors.primary,
+                fontWeight: "800",
+                marginTop: 12,
+              }}
+            >
+              Browse all plans ›
+            </Text>
+          </Pressable>
         </View>
       )}
+
+      <SubscriptionHistory />
     </Screen>
   );
 }

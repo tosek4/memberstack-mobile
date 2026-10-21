@@ -25,6 +25,7 @@ function RootNavigator() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
+      <Stack.Screen name="plans" />
       <Stack.Protected guard={status === "signedIn"}>
         <Stack.Screen name="(tabs)" />
       </Stack.Protected>

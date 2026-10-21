@@ -84,6 +84,18 @@ export function LoginScreen() {
         <Text style={styles.hint}>
           We'll email you a one-time code. No password needed.
         </Text>
+        <Pressable onPress={() => router.push("/plans")}>
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: 18,
+              color: palette.primary,
+              fontWeight: "700",
+            }}
+          >
+            Not a member yet? See our plans ›
+          </Text>
+        </Pressable>
         <View style={styles.footer}>
           <View style={styles.footerDot} />
           <Text style={styles.footerText}>A simpler way to stay on track</Text>

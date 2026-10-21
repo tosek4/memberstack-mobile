@@ -59,3 +59,21 @@ export interface Props {
   error: string | null;
   onRetry: () => void;
 }
+
+
+export interface MemberSubscriptionHistory {
+  id: number;
+  status: SubscriptionStatus;
+  startedAt: string;
+  expiresAt: string;
+  membershipPlan: MembershipPlan;
+}
+
+
+export interface PublicPlan {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  duration: number; // days
+}

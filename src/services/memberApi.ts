@@ -1,4 +1,4 @@
-import { MeResponse } from "@/types";
+import { MemberSubscription, MemberSubscriptionHistory, MeResponse } from "@/types";
 import { apiRequest } from "./api";
 
 export function getMe(): Promise<MeResponse> {
@@ -7,4 +7,12 @@ export function getMe(): Promise<MeResponse> {
 
 export function getMyQrToken(): Promise<{ token: string }> {
   return apiRequest<{ token: string }>("/member-auth/qr");
+}
+
+export function getMySubscriptionHistory(): Promise<{
+  subscriptions: MemberSubscriptionHistory[];
+}> {
+  return apiRequest<{ subscriptions: MemberSubscriptionHistory[] }>(
+    "/member-auth/subscription-history",
+  );
 }
