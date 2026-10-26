@@ -1,4 +1,4 @@
-import { MemberSubscription, MemberSubscriptionHistory, MeResponse } from "@/types";
+import { MemberSubscriptionHistory, MeResponse } from "@/types";
 import { apiRequest } from "./api";
 
 export function getMe(): Promise<MeResponse> {

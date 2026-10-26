@@ -31,7 +31,11 @@ export function useQrToken() {
   }, []);
 
   useEffect(() => {
-    load();
+    const task = async () => {
+      await load();
+    };
+
+    void task();
   }, [load]);
 
   const reload = useCallback(async () => {

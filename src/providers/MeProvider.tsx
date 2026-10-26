@@ -1,6 +1,3 @@
-import { getErrorMessage } from "@/services/api";
-import { getMe } from "@/services/memberApi";
-import { MeResponse } from "@/types";
 import {
   createContext,
   ReactNode,
@@ -8,6 +5,10 @@ import {
   useEffect,
   useState,
 } from "react";
+
+import { getErrorMessage } from "@/services/api";
+import { getMe } from "@/services/memberApi";
+import { MeResponse } from "@/types";
 
 interface MeContextValue {
   data: MeResponse | null;
@@ -23,25 +24,47 @@ export function MeProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchMe = useCallback(async () => {
+  const reload = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
     try {
       setData(await getMe());
-      setError(null);
-    } catch (e) {
-      setError(getErrorMessage(e));
+    } catch (err) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchMe();
-  }, [fetchMe]);
+    let active = true;
 
-  const reload = useCallback(async () => {
-    setLoading(true);
-    await fetchMe();
-  }, [fetchMe]);
+    const fetchMe = async () => {
+      try {
+        const result = await getMe();
+
+        if (active) {
+          setData(result);
+          setError(null);
+        }
+      } catch (err) {
+        if (active) {
+          setError(getErrorMessage(err));
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchMe();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <MeContext.Provider value={{ data, loading, error, reload }}>

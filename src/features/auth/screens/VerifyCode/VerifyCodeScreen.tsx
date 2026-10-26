@@ -100,7 +100,7 @@ export function VerifyCodeScreen() {
         </Pressable>
         <Pressable onPress={resend} disabled={cooldown > 0}>
           <Text style={styles.resend}>
-            Didn't get a code? Check your spam folder or{" "}
+            Didn&apos;t get a code? Check your spam folder or{" "}
             <Text
               style={{
                 color: cooldown > 0 ? "#94A3B8" : palette.primary,

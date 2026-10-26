@@ -23,7 +23,6 @@ export function verifyCode(email: string, code: string): Promise<AuthTokens> {
 export async function logout(): Promise<void> {
   const tokens = await getTokens();
 
-  console.log("tokens===", tokens);
   if (!tokens) return;
   try {
     await apiRequest<void>("/member-auth/logout", {

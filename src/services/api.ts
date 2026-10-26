@@ -35,7 +35,7 @@ async function send(path: string, init: RequestInit, accessToken?: string) {
     });
   } catch (error) {
     throw new ApiError(
-      0,
+      error instanceof Error ? 0 : 0,
       "Can't reach the server. Check your connection and try again.",
     );
   }
@@ -71,7 +71,7 @@ async function doRefresh(): Promise<string | null> {
   });
 
   if (response.status === 401 || response.status === 403) {
-    await clearTokens(); 
+    await clearTokens();
     return null;
   }
   if (!response.ok) {
