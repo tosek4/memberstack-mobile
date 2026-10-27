@@ -1,47 +1,46 @@
+import { queryKeys } from "@/lib/queryKeys";
 import { ApiError, getErrorMessage } from "@/services/api";
 import { getMyQrToken } from "@/services/memberApi";
 import { clearQrToken, getQrToken, saveQrToken } from "@/services/tokenStorage";
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export function useQrToken() {
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const query = useQuery({
+    queryKey: queryKeys.qrToken,
+    queryFn: async () => {
+      try {
+        const { token } = await getMyQrToken();
 
-  const load = useCallback(async () => {
-    try {
-      const { token: current } = await getMyQrToken();
-      await saveQrToken(current);
-      setToken(current);
-      setError(null);
-    } catch (e) {
-      const offline = e instanceof ApiError && e.status === 0;
-      const cached = offline ? await getQrToken() : null;
-      if (cached) {
-        setToken(cached); 
-        setError(null);
-      } else {
-        if (!offline) await clearQrToken(); 
-        setToken(null);
-        setError(getErrorMessage(e));
+        await saveQrToken(token);
+
+        return token;
+      } catch (error) {
+        const offline = error instanceof ApiError && error.status === 0;
+
+        if (offline) {
+          const cachedToken = await getQrToken();
+
+          if (cachedToken) {
+            return cachedToken;
+          }
+        } else {
+          await clearQrToken();
+        }
+
+        throw error;
       }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+    retry: 0,
+  });
 
-  useEffect(() => {
-    const task = async () => {
-      await load();
-    };
-
-    void task();
-  }, [load]);
-
-  const reload = useCallback(async () => {
-    setLoading(true);
-    await load();
-  }, [load]);
-
-  return { token, loading, error, reload };
+  return {
+    token: query.data ?? null,
+    loading: query.isPending,
+    error: query.error ? getErrorMessage(query.error) : null,
+    reload: async () => {
+      await query.refetch();
+    },
+  };
 }
