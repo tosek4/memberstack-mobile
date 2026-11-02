@@ -7,6 +7,8 @@ import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { styles } from "./HomeScreen.styles";
 
+import { RecentCheckIns } from "@/features/home/components/RecentCheckIns";
+
 export function HomeScreen() {
   const { data, loading, error, reload } = useMe();
   if (!data)
@@ -112,6 +114,7 @@ export function HomeScreen() {
           </Text>
         </View>
       </View>
+      <RecentCheckIns />
     </Screen>
   );
 }

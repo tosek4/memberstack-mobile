@@ -60,7 +60,6 @@ export interface Props {
   onRetry: () => void;
 }
 
-
 export interface MemberSubscriptionHistory {
   id: number;
   status: SubscriptionStatus;
@@ -69,11 +68,27 @@ export interface MemberSubscriptionHistory {
   membershipPlan: MembershipPlan;
 }
 
-
 export interface PublicPlan {
   id: number;
   name: string;
   description: string;
   price: number;
   duration: number; // days
+}
+
+export interface CheckIn {
+  id: number;
+  checkIn: string;
+  checkOut: string | null;
+  status: "checked-in" | "checked-out";
+}
+
+export interface CheckInHistoryResponse {
+  checkIns: CheckIn[];
+  pagination: {
+    limit: number;
+    offset: number;
+    total: number;
+    hasMore: boolean;
+  };
 }
