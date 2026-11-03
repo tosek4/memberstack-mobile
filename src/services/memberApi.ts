@@ -2,6 +2,7 @@ import {
   CheckInHistoryResponse,
   MemberSubscriptionHistory,
   MeResponse,
+  UpdateMemberProfileRequest,
 } from "@/types";
 import { apiRequest } from "./api";
 
@@ -33,4 +34,13 @@ export function getMyCheckIns(
   return apiRequest<CheckInHistoryResponse>(
     `/member-auth/check-ins?${params.toString()}`,
   );
+}
+
+export function updateMyProfile(
+  data: UpdateMemberProfileRequest,
+): Promise<MeResponse> {
+  return apiRequest<MeResponse>("/member-auth/me", {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 }

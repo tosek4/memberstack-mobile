@@ -31,3 +31,19 @@ export function formatCheckInTime(value: string): string {
     minute: "2-digit",
   }).format(date);
 }
+
+export function formatDate(value: string | null) {
+  if (!value) return "Not provided";
+
+  return new Date(value).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export function formatStatus(value: string) {
+  if (!value) return "Unknown";
+
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}

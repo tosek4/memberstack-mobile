@@ -92,3 +92,9 @@ export interface CheckInHistoryResponse {
     hasMore: boolean;
   };
 }
+
+export interface UpdateMemberProfileRequest {
+  firstName?: string;
+  lastName?: string;
+  phone?: string | null;
+}
