@@ -2,6 +2,7 @@ import {
   CheckInHistoryResponse,
   MemberSubscriptionHistory,
   MeResponse,
+  PaymentHistoryResponse,
   UpdateMemberProfileRequest,
 } from "@/types";
 import { apiRequest } from "./api";
@@ -43,4 +44,18 @@ export function updateMyProfile(
     method: "PATCH",
     body: JSON.stringify(data),
   });
+}
+
+export function getMyPaymentHistory(
+  limit = 10,
+  offset = 0,
+): Promise<PaymentHistoryResponse> {
+  const params = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+  });
+
+  return apiRequest<PaymentHistoryResponse>(
+    `/member-auth/payments?${params.toString()}`,
+  );
 }

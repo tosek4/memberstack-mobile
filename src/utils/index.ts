@@ -47,3 +47,10 @@ export function formatStatus(value: string) {
 
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
+
+export function formatAmount(amount: number, currency: string) {
+  return new Intl.NumberFormat("en-IE", {
+    style: "currency",
+    currency,
+  }).format(amount);
+}

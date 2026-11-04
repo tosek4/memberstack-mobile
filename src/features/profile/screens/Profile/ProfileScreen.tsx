@@ -106,6 +106,25 @@ export function ProfileScreen() {
         </View>
       </View>
 
+      <Text style={ui.sectionTitle}>Activity</Text>
+
+      <Pressable
+        style={ui.card}
+        onPress={() => router.push("/payment-history")}
+        accessibilityRole="button"
+      >
+        <View style={styles.actionRow}>
+          <View style={styles.actionContent}>
+            <Text style={styles.actionTitle}>Payment history</Text>
+            <Text style={styles.actionDescription}>
+              View your membership payments and transactions
+            </Text>
+          </View>
+
+          <Text style={styles.arrow}>›</Text>
+        </View>
+      </Pressable>
+
       {/* Personal information */}
       <Text style={ui.sectionTitle}>Personal information</Text>
 

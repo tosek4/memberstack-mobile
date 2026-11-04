@@ -7,6 +7,15 @@ export type MemberStatus =
 
 export type SubscriptionStatus = "active" | "expired" | "inactive";
 
+export type PaymentMethod =
+  | "cash"
+  | "card"
+  | "bank_transfer"
+  | "paypal"
+  | "other";
+
+export type PaymentStatus = "paid" | "pending" | "failed" | "refunded";
+
 export interface Member {
   id: number;
   firstName: string;
@@ -97,4 +106,28 @@ export interface UpdateMemberProfileRequest {
   firstName?: string;
   lastName?: string;
   phone?: string | null;
+}
+
+export interface MemberPaymentHistoryItem {
+  id: number;
+  amount: number;
+  currency: "EUR";
+  paymentMethod: PaymentMethod;
+  status: PaymentStatus;
+  paidAt: string;
+  transactionReference?: string;
+  membershipPlan: {
+    id: number;
+    name: string;
+  } | null;
+}
+
+export interface PaymentHistoryResponse {
+  payments: MemberPaymentHistoryItem[];
+  pagination: {
+    limit: number;
+    offset: number;
+    total: number;
+    hasMore: boolean;
+  };
 }

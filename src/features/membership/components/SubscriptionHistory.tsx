@@ -1,18 +1,12 @@
 import { screenStyles as ui } from "@/components/ui/Screen.styles";
 import { useSubscriptionHistory } from "@/hooks/useSubscriptionHistory";
 import { lightColors } from "@/theme";
+import { formatDate } from "@/utils";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { styles } from "./SubscriptionHistory.styled";
 import { PREVIEW_COUNT } from "./utils";
-
-const formatDate = (date: string) =>
-  new Date(date).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
 
 export function SubscriptionHistory() {
   const { subscriptions, loading, error, reload } = useSubscriptionHistory();
