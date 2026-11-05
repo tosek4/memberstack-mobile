@@ -1,14 +1,18 @@
-import { screenStyles as ui } from "@/components/ui/Screen.styles";
+import { useScreenStyles } from "@/components/ui/Screen.styles";
+import { useColors } from "@/hooks/useColors";
 import { useSubscriptionHistory } from "@/hooks/useSubscriptionHistory";
-import { lightColors } from "@/theme";
 import { formatDate } from "@/utils";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
-import { styles } from "./SubscriptionHistory.styled";
+import { useSubscriptionHistoryStyles } from "./SubscriptionHistory.styled";
 import { PREVIEW_COUNT } from "./utils";
 
 export function SubscriptionHistory() {
+  const ui = useScreenStyles();
+  const colors = useColors();
+  const styles = useSubscriptionHistoryStyles();
+
   const { subscriptions, loading, error, reload } = useSubscriptionHistory();
 
   const [showAll, setShowAll] = useState(false);
@@ -28,10 +32,11 @@ export function SubscriptionHistory() {
       <Text style={ui.sectionTitle}>Subscription history</Text>
 
       {subscriptions.length === 0 && loading ? (
-        <ActivityIndicator color={lightColors.primary} style={styles.pad} />
+        <ActivityIndicator color={colors.primary} style={styles.pad} />
       ) : subscriptions.length === 0 && error ? (
         <View style={ui.card}>
           <Text style={ui.subtitle}>{error}</Text>
+
           <Pressable onPress={() => void reload()}>
             <Text style={styles.action}>Try again</Text>
           </Pressable>
@@ -45,8 +50,9 @@ export function SubscriptionHistory() {
           {visible.map((sub, index) => (
             <View key={sub.id}>
               <View style={styles.row}>
-                <View style={{ flex: 1 }}>
+                <View style={styles.planContent}>
                   <Text style={styles.plan}>{sub.membershipPlan.name}</Text>
+
                   <Text style={styles.dates}>
                     {formatDate(sub.startedAt)} – {formatDate(sub.expiresAt)}
                   </Text>
@@ -54,6 +60,7 @@ export function SubscriptionHistory() {
 
                 <View style={styles.right}>
                   <Text style={styles.price}>€{sub.membershipPlan.price}</Text>
+
                   <Text
                     style={[
                       styles.status,

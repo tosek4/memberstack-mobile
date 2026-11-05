@@ -1,5 +1,5 @@
 import { Screen } from "@/components/ui/Screen";
-import { screenStyles as ui } from "@/components/ui/Screen.styles";
+import { useScreenStyles } from "@/components/ui/Screen.styles";
 import { ScreenState } from "@/components/ui/ScreenState";
 import {
   ProfileFormValues,
@@ -13,9 +13,12 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { ProfileFormInput } from "../../components/ProfileForm";
-import { styles } from "./EditProfileScreen.styled";
+import { useEditProfileScreenStyles } from "./EditProfileScreen.styled";
 
 export function EditProfileScreen() {
+  const ui = useScreenStyles();
+  const styles = useEditProfileScreenStyles();
+
   const { data, loading, error, reload } = useMe();
 
   const {
@@ -146,9 +149,10 @@ export function EditProfileScreen() {
 
       <View style={styles.actions}>
         <Pressable
-          style={[
+          style={({ pressed }) => [
             styles.saveButton,
             (saving || !isDirty) && styles.saveButtonDisabled,
+            pressed && !saving && isDirty && styles.pressed,
           ]}
           onPress={() => handleSubmit(onSubmit)()}
           disabled={saving || !isDirty}
@@ -160,7 +164,10 @@ export function EditProfileScreen() {
         </Pressable>
 
         <Pressable
-          style={styles.cancelButton}
+          style={({ pressed }) => [
+            styles.cancelButton,
+            pressed && styles.pressed,
+          ]}
           onPress={() => router.back()}
           disabled={saving}
           accessibilityRole="button"

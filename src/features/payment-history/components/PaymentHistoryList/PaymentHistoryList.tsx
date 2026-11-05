@@ -1,4 +1,4 @@
-import { lightColors } from "@/theme";
+import { useColors } from "@/hooks/useColors";
 import {
   ActivityIndicator,
   FlatList,
@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { PaymentHistoryItem } from "../PaymentHistoryItem/PaymentHistoryItem";
 import { PaymentHistoryListProps } from "../types";
-import { styles } from "./PaymentHistoryList.styled";
+import { usePaymentHistoryListStyles } from "./PaymentHistoryList.styled";
 
 export function PaymentHistoryList({
   payments,
@@ -21,11 +21,14 @@ export function PaymentHistoryList({
   onRetry,
   ListHeaderComponent,
 }: PaymentHistoryListProps) {
+  const colors = useColors();
+  const styles = usePaymentHistoryListStyles();
+
   const renderEmpty = () => {
     if (loading) {
       return (
         <View style={styles.stateContainer}>
-          <ActivityIndicator size="large" color={lightColors.primary} />
+          <ActivityIndicator size="large" color={colors.primary} />
           <Text style={styles.stateTitle}>Loading payments</Text>
           <Text style={styles.stateDescription}>
             Your payment history is on its way.
@@ -72,7 +75,7 @@ export function PaymentHistoryList({
       ListFooterComponent={
         loadingMore ? (
           <View style={styles.footerLoader}>
-            <ActivityIndicator color={lightColors.primary} />
+            <ActivityIndicator color={colors.primary} />
             <Text style={styles.footerText}>Loading more payments...</Text>
           </View>
         ) : undefined
@@ -86,8 +89,8 @@ export function PaymentHistoryList({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          tintColor={lightColors.primary}
-          colors={[lightColors.primary]}
+          tintColor={colors.primary}
+          colors={[colors.primary]}
         />
       }
       onEndReached={onLoadMore}

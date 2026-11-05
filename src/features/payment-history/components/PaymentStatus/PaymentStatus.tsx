@@ -1,16 +1,40 @@
+import { useColors } from "@/hooks/useColors";
 import { Text, View } from "react-native";
 import { PaymentStatusProps } from "../types";
-import { styles } from "./PaymentStatus.styled";
-import { statusConfig } from "../utils";
+import { paymentStatusLabels } from "../utils";
+import { usePaymentStatusStyles } from "./PaymentStatus.styled";
 
 export function PaymentStatus({ status }: PaymentStatusProps) {
-  const config = statusConfig[status] ?? statusConfig.pending;
+  const colors = useColors();
+  const styles = usePaymentStatusStyles();
+
+  const config = {
+    paid: {
+      color: colors.success,
+      backgroundColor: colors.successBackground,
+    },
+    pending: {
+      color: colors.warning,
+      backgroundColor: colors.warningBackground,
+    },
+    failed: {
+      color: colors.danger,
+      backgroundColor: colors.dangerBackground,
+    },
+    refunded: {
+      color: colors.textMuted,
+      backgroundColor: colors.surfaceMuted,
+    },
+  }[status] ?? {
+    color: colors.warning,
+    backgroundColor: colors.warningBackground,
+  };
 
   return (
     <View style={[styles.badge, { backgroundColor: config.backgroundColor }]}>
       <View style={[styles.dot, { backgroundColor: config.color }]} />
       <Text style={[styles.label, { color: config.color }]}>
-        {config.label}
+        {paymentStatusLabels[status] ?? "Pending"}
       </Text>
     </View>
   );

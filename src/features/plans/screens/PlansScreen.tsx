@@ -1,14 +1,19 @@
 import { Screen } from "@/components/ui/Screen";
-import { screenStyles as ui } from "@/components/ui/Screen.styles";
-import { lightColors } from "@/theme";
+import { useScreenStyles } from "@/components/ui/Screen.styles";
+import { useColors } from "@/hooks/useColors";
+import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
-
-import { usePublicPlans } from "@/hooks/usePublicPlans";
-import { styles } from "./PlansScreem.styled";
+import { usePlansScreenStyles } from "./PlansScreem.styled";
 
 export function PlansScreen() {
-  const { currentPlanId } = useLocalSearchParams<{ currentPlanId?: string }>();
+  const ui = useScreenStyles();
+  const colors = useColors();
+  const styles = usePlansScreenStyles();
+
+  const { currentPlanId } = useLocalSearchParams<{
+    currentPlanId?: string;
+  }>();
 
   const { plans, loading, error, retry } = usePublicPlans();
 
@@ -18,8 +23,9 @@ export function PlansScreen() {
     <Screen>
       <Pressable
         onPress={() => router.back()}
-        style={styles.back}
+        style={({ pressed }) => [styles.back, pressed && { opacity: 0.7 }]}
         accessibilityRole="button"
+        accessibilityLabel="Go back"
       >
         <Text style={styles.backText}>‹ Back</Text>
       </Pressable>
@@ -33,18 +39,18 @@ export function PlansScreen() {
       {loading ? (
         <ActivityIndicator
           size="large"
-          color={lightColors.primary}
-          style={styles.pad}
+          color={colors.primary}
+          style={[styles.pad, styles.loading]}
         />
       ) : error ? (
-        <View style={[ui.card, { marginTop: 20 }]}>
+        <View style={[ui.card, styles.errorCard]}>
           <Text style={ui.subtitle}>{error}</Text>
           <Pressable onPress={retry} accessibilityRole="button">
             <Text style={styles.action}>Try again</Text>
           </Pressable>
         </View>
       ) : sortedPlans.length === 0 ? (
-        <View style={[ui.card, { marginTop: 20 }]}>
+        <View style={[ui.card, styles.errorCard]}>
           <Text style={ui.subtitle}>No plans are available right now.</Text>
         </View>
       ) : (

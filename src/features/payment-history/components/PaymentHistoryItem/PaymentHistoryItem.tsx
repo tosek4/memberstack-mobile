@@ -3,9 +3,11 @@ import { Text, View } from "react-native";
 import { PaymentStatus } from "../PaymentStatus/PaymentStatus";
 import { PaymentHistoryItemProps } from "../types";
 import { paymentMethodLabels } from "../utils";
-import { styles } from "./PaymentHistoryItem.styled";
+import { usePaymentHistoryItemStyles } from "./PaymentHistoryItem.styled";
 
 export function PaymentHistoryItem({ payment }: PaymentHistoryItemProps) {
+  const styles = usePaymentHistoryItemStyles();
+
   const paymentMethod =
     paymentMethodLabels[payment.paymentMethod] ?? payment.paymentMethod;
 

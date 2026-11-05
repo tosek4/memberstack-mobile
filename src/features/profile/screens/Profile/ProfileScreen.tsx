@@ -1,16 +1,28 @@
 import { Screen } from "@/components/ui/Screen";
-import { screenStyles as ui } from "@/components/ui/Screen.styles";
+import { useScreenStyles } from "@/components/ui/Screen.styles";
 import { ScreenState } from "@/components/ui/ScreenState";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useColors";
 import { useMe } from "@/hooks/useMe";
 import { formatDate, formatStatus } from "@/utils";
 import { router } from "expo-router";
 import { Alert, Pressable, Text, View } from "react-native";
-import { styles } from "./ProfileScreen.styled";
+import { useProfileScreenStyles } from "./ProfileScreen.styled";
 
 export function ProfileScreen() {
+  const ui = useScreenStyles();
+  const styles = useProfileScreenStyles();
+
   const { data, loading, error, reload } = useMe();
   const { signOut } = useAuth();
+
+  const { colors, mode, setMode } = useTheme();
+
+  const themeOptions = [
+    { label: "Automatic", value: "system" },
+    { label: "Light", value: "light" },
+    { label: "Dark", value: "dark" },
+  ] as const;
 
   if (!data) {
     return <ScreenState loading={loading} error={error} onRetry={reload} />;
@@ -82,7 +94,7 @@ export function ProfileScreen() {
       </View>
 
       <Pressable
-        style={styles.editButton}
+        style={({ pressed }) => [styles.editButton, pressed && styles.pressed]}
         onPress={() => router.push("/edit-profile")}
         accessibilityRole="button"
       >
@@ -106,10 +118,11 @@ export function ProfileScreen() {
         </View>
       </View>
 
+      {/* Activity */}
       <Text style={ui.sectionTitle}>Activity</Text>
 
       <Pressable
-        style={ui.card}
+        style={({ pressed }) => [ui.card, pressed && styles.pressed]}
         onPress={() => router.push("/payment-history")}
         accessibilityRole="button"
       >
@@ -143,11 +156,56 @@ export function ProfileScreen() {
         ))}
       </View>
 
+      {/* Appearance */}
+      <Text style={ui.sectionTitle}>Appearance</Text>
+
+      <View style={styles.appearanceCard}>
+        <Text style={styles.appearanceTitle}>Theme</Text>
+
+        <Text style={styles.appearanceDescription}>
+          Choose how MemberStack looks on your device.
+        </Text>
+
+        <View style={styles.themeOptions}>
+          {themeOptions.map((option) => {
+            const selected = mode === option.value;
+
+            return (
+              <Pressable
+                key={option.value}
+                onPress={() => void setMode(option.value)}
+                accessibilityRole="button"
+                accessibilityState={{ selected }}
+                style={({ pressed }) => [
+                  styles.themeOption,
+                  {
+                    borderColor: selected ? colors.primary : colors.border,
+                    backgroundColor: selected
+                      ? colors.primary
+                      : colors.surfaceMuted,
+                  },
+                  pressed && styles.pressed,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.themeOptionText,
+                    { color: selected ? colors.onPrimary : colors.text },
+                  ]}
+                >
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
+
       {/* App actions */}
       <Text style={ui.sectionTitle}>App</Text>
 
       <Pressable
-        style={ui.card}
+        style={({ pressed }) => [ui.card, pressed && styles.pressed]}
         onPress={() =>
           Alert.alert(
             "Help & support",
@@ -169,7 +227,7 @@ export function ProfileScreen() {
       </Pressable>
 
       <Pressable
-        style={ui.card}
+        style={({ pressed }) => [ui.card, pressed && styles.pressed]}
         onPress={handleSignOut}
         accessibilityRole="button"
       >

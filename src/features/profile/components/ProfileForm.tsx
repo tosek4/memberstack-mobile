@@ -1,5 +1,6 @@
-import { lightColors as c } from "@/theme";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useColors } from "@/hooks/useColors";
+import { Text, TextInput, View } from "react-native";
+import { useProfileFormInputStyles } from "./ProfileFormInput.styled";
 import { ProfileInputProps } from "./types";
 
 export function ProfileFormInput({
@@ -13,6 +14,9 @@ export function ProfileFormInput({
   keyboardType = "default",
   autoCapitalize = "sentences",
 }: ProfileInputProps) {
+  const colors = useColors();
+  const styles = useProfileFormInputStyles();
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -27,7 +31,7 @@ export function ProfileFormInput({
         onChangeText={onChangeText}
         onBlur={onBlur}
         placeholder={placeholder}
-        placeholderTextColor={c.textMuted}
+        placeholderTextColor={colors.placeholder}
         editable={editable}
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
@@ -38,35 +42,3 @@ export function ProfileFormInput({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 7,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: c.text,
-  },
-  input: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: "#E1E7ED",
-    borderRadius: 12,
-    paddingHorizontal: 13,
-    fontSize: 14,
-    color: c.text,
-    backgroundColor: "#FFFFFF",
-  },
-  disabledInput: {
-    backgroundColor: "#F1F4F7",
-    color: c.textMuted,
-  },
-  errorInput: {
-    borderColor: "#DC2626",
-  },
-  error: {
-    fontSize: 11,
-    color: "#DC2626",
-  },
-});

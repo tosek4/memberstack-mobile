@@ -3,9 +3,11 @@ import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PaymentHistoryList } from "../components/PaymentHistoryList/PaymentHistoryList";
-import { styles } from "./PaymentHistoryScreen.styled";
+import { usePaymentHistoryScreenStyles } from "./PaymentHistoryScreen.styled";
 
 export function PaymentHistoryScreen() {
+  const styles = usePaymentHistoryScreenStyles();
+
   const {
     payments,
     total,
@@ -42,7 +44,10 @@ export function PaymentHistoryScreen() {
           <View style={styles.header}>
             <Pressable
               onPress={() => router.back()}
-              style={styles.backButton}
+              style={({ pressed }) => [
+                styles.backButton,
+                pressed && styles.pressed,
+              ]}
               accessibilityRole="button"
               accessibilityLabel="Go back"
             >
@@ -56,12 +61,14 @@ export function PaymentHistoryScreen() {
             </Text>
 
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryLabel}>Total payments</Text>
-              <Text style={styles.summaryValue}>{total}</Text>
+              <View style={styles.summaryContent}>
+                <Text style={styles.summaryLabel}>Total payments</Text>
+                <Text style={styles.summaryValue}>{total}</Text>
+              </View>
             </View>
           </View>
         }
-      ></PaymentHistoryList>
+      />
     </SafeAreaView>
   );
 }

@@ -1,5 +1,5 @@
 import { useCheckInHistory } from "@/hooks/useCheckInHistory";
-import { lightColors } from "@/theme";
+import { useColors } from "@/hooks/useColors";
 import { formatCheckInDate, formatCheckInTime } from "@/utils";
 import { router } from "expo-router";
 import {
@@ -11,9 +11,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CheckInHistoryStyles } from "./CheckInHistoryScreem.styled";
+import { useCheckInHistoryStyles } from "./CheckInHistoryScreem.styled";
 
 export function CheckInHistoryScreen() {
+  const colors = useColors();
+  const styles = useCheckInHistoryStyles();
+
   const {
     checkIns,
     total,
@@ -36,48 +39,47 @@ export function CheckInHistoryScreen() {
   };
 
   const renderHeader = () => (
-    <View style={CheckInHistoryStyles.header}>
+    <View style={styles.header}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Go back"
         onPress={() => router.back()}
-        style={({ pressed }) => [
-          CheckInHistoryStyles.backButton,
-          pressed && CheckInHistoryStyles.pressed,
-        ]}
+        style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
       >
-        <Text style={CheckInHistoryStyles.backButtonText}>‹</Text>
-        <Text style={CheckInHistoryStyles.backLabel}>Back</Text>
+        <Text style={styles.backButtonText}>‹</Text>
+        <Text style={styles.backLabel}>Back</Text>
       </Pressable>
-      <Text style={CheckInHistoryStyles.title}>Attendance history</Text>
-      <Text style={CheckInHistoryStyles.subtitle}>
-        Keep track of your visits.
-      </Text>
+
+      <Text style={styles.title}>Attendance history</Text>
+
+      <Text style={styles.subtitle}>Keep track of your visits.</Text>
+
       {!loading && !error && (
-        <View style={CheckInHistoryStyles.summaryCard}>
-          <View style={CheckInHistoryStyles.summaryIcon}>
-            <Text style={CheckInHistoryStyles.summaryIconText}>✓</Text>
+        <View style={styles.summaryCard}>
+          <View style={styles.summaryIcon}>
+            <Text style={styles.summaryIconText}>✓</Text>
           </View>
 
-          <View style={CheckInHistoryStyles.summaryContent}>
-            <Text style={CheckInHistoryStyles.summaryLabel}>Total visits</Text>
-            <Text style={CheckInHistoryStyles.summaryValue}>{total}</Text>
+          <View style={styles.summaryContent}>
+            <Text style={styles.summaryLabel}>Total visits</Text>
+            <Text style={styles.summaryValue}>{total}</Text>
           </View>
         </View>
       )}
-      <Text style={CheckInHistoryStyles.sectionTitle}>Your visits</Text>
+
+      <Text style={styles.sectionTitle}>Your visits</Text>
     </View>
   );
 
   const renderEmpty = () => {
     if (loading) {
       return (
-        <View style={CheckInHistoryStyles.stateContainer}>
-          <ActivityIndicator size="large" color={lightColors.primary} />
-          <Text style={CheckInHistoryStyles.stateTitle}>
-            Loading attendance
-          </Text>
-          <Text style={CheckInHistoryStyles.stateDescription}>
+        <View style={styles.stateContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+
+          <Text style={styles.stateTitle}>Loading attendance</Text>
+
+          <Text style={styles.stateDescription}>
             Your visit history is on its way.
           </Text>
         </View>
@@ -86,34 +88,34 @@ export function CheckInHistoryScreen() {
 
     if (error) {
       return (
-        <View style={CheckInHistoryStyles.stateContainer}>
-          <Text style={CheckInHistoryStyles.stateIcon}>!</Text>
-          <Text style={CheckInHistoryStyles.stateTitle}>
-            Couldn&apos;t load attendance
-          </Text>
-          <Text style={CheckInHistoryStyles.stateDescription}>{error}</Text>
+        <View style={styles.stateContainer}>
+          <Text style={styles.stateIcon}>!</Text>
+
+          <Text style={styles.stateTitle}>Couldn&apos;t load attendance</Text>
+
+          <Text style={styles.stateDescription}>{error}</Text>
 
           <Pressable
             accessibilityRole="button"
             onPress={() => void reload()}
             style={({ pressed }) => [
-              CheckInHistoryStyles.primaryButton,
-              pressed && CheckInHistoryStyles.pressed,
+              styles.primaryButton,
+              pressed && styles.pressed,
             ]}
           >
-            <Text style={CheckInHistoryStyles.primaryButtonText}>
-              Try again
-            </Text>
+            <Text style={styles.primaryButtonText}>Try again</Text>
           </Pressable>
         </View>
       );
     }
 
     return (
-      <View style={CheckInHistoryStyles.stateContainer}>
-        <Text style={CheckInHistoryStyles.stateIcon}>◷</Text>
-        <Text style={CheckInHistoryStyles.stateTitle}>No visits yet</Text>
-        <Text style={CheckInHistoryStyles.stateDescription}>
+      <View style={styles.stateContainer}>
+        <Text style={styles.stateIcon}>◷</Text>
+
+        <Text style={styles.stateTitle}>No visits yet</Text>
+
+        <Text style={styles.stateDescription}>
           Your attendance records will appear here after your first check-in.
         </Text>
       </View>
@@ -121,35 +123,38 @@ export function CheckInHistoryScreen() {
   };
 
   return (
-    <SafeAreaView
-      style={CheckInHistoryStyles.safeArea}
-      edges={["top", "bottom"]}
-    >
+    <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <FlatList
         data={checkIns}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <View style={CheckInHistoryStyles.visitCard}>
-            <View style={CheckInHistoryStyles.visitIcon}>
-              <Text style={CheckInHistoryStyles.visitIconText}>✓</Text>
+          <View style={styles.visitCard}>
+            <View style={styles.visitIcon}>
+              <Text style={styles.visitIconText}>✓</Text>
             </View>
-            <View style={CheckInHistoryStyles.visitContent}>
-              <Text style={CheckInHistoryStyles.visitTitle}>Gym visit</Text>
-              <Text style={CheckInHistoryStyles.visitDate}>
+
+            <View style={styles.visitContent}>
+              <Text style={styles.visitTitle}>Gym visit</Text>
+
+              <Text style={styles.visitDate}>
                 {formatCheckInDate(item.checkIn)}
               </Text>
             </View>
-            <View style={CheckInHistoryStyles.visitTimeContainer}>
-              <Text style={CheckInHistoryStyles.visitTime}>
+
+            <View style={styles.visitTimeContainer}>
+              <Text style={styles.visitTime}>
                 {formatCheckInTime(item.checkIn)}
               </Text>
-              <Text style={CheckInHistoryStyles.visitStatus}>Checked in</Text>
+
+              <Text style={styles.visitStatus}>Checked in</Text>
             </View>
-            <View style={CheckInHistoryStyles.visitTimeContainer}>
-              <Text style={CheckInHistoryStyles.visitTime}>
+
+            <View style={styles.visitTimeContainer}>
+              <Text style={styles.visitTime}>
                 {formatCheckInTime(item.checkOut as string)}
               </Text>
-              <Text style={CheckInHistoryStyles.visitStatus}>Checked out</Text>
+
+              <Text style={styles.visitStatus}>Checked out</Text>
             </View>
           </View>
         )}
@@ -157,25 +162,24 @@ export function CheckInHistoryScreen() {
         ListEmptyComponent={renderEmpty}
         ListFooterComponent={
           loadingMore ? (
-            <View style={CheckInHistoryStyles.footerLoader}>
-              <ActivityIndicator color={lightColors.primary} />
-              <Text style={CheckInHistoryStyles.footerText}>
-                Loading more visits...
-              </Text>
+            <View style={styles.footerLoader}>
+              <ActivityIndicator color={colors.primary} />
+
+              <Text style={styles.footerText}>Loading more visits...</Text>
             </View>
           ) : undefined
         }
         contentContainerStyle={[
-          CheckInHistoryStyles.listContent,
-          checkIns.length === 0 && CheckInHistoryStyles.emptyListContent,
+          styles.listContent,
+          checkIns.length === 0 && styles.emptyListContent,
         ]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => void reload()}
-            tintColor={lightColors.primary}
-            colors={[lightColors.primary]}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
           />
         }
         onEndReached={handleLoadMore}

@@ -1,7 +1,7 @@
-import { lightColors } from "@/theme";
+import { useScreenStyles } from "@/components/ui/Screen.styles";
+import { useColors } from "@/hooks/useColors";
 import { ReactNode } from "react";
 import { RefreshControl, SafeAreaView, ScrollView, View } from "react-native";
-import { styles } from "./Screen.styles";
 
 export function Screen({
   children,
@@ -14,6 +14,9 @@ export function Screen({
   onRefresh?: () => void;
   refreshing?: boolean;
 }) {
+  const colors = useColors();
+  const styles = useScreenStyles();
+
   return (
     <SafeAreaView style={styles.safe}>
       {scroll ? (
@@ -25,7 +28,7 @@ export function Screen({
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                tintColor={lightColors.primary}
+                tintColor={colors.primary}
               />
             ) : undefined
           }
